@@ -1,18 +1,13 @@
+from os import error
 from bs4 import BeautifulSoup
 from datetime import datetime
-import pprint
 from random import randint
 import time
 import requests
 from extract import extract
+from provinces import provinces
 
 start_time = datetime.now()
-pp = pprint.PrettyPrinter(indent=4)
-errors = 0
-
-
-# time.sleep(randint(0,3))
-
 
 # Measuring execution time
 def execution_time(start, end):
@@ -27,46 +22,29 @@ def execution_time(start, end):
 
 # Making the request
 
-req = requests.get("https://ca.indeed.com/jobs?q&l=Nunavut")
-print(req)
+def send_petition(province="canada" , iterations=1):
+    pages = [n for n in range(0, (iterations*10) +1, 10) ]
+    
+    try:
+        for page in pages:
+            time.sleep(randint(0,3))
+            url_endpoint = f"https://ca.indeed.com/jobs?q&l={province}&start={page}"
+            req = requests.get(url_endpoint)
+    
+    
+            soup = BeautifulSoup(req.text,'html.parser')
+            all_jobs = soup.find_all(class_="slider_container")
 
-# extra="&start=10"
-# nunavut
-# yukon
-
-# https://ca.indeed.com/jobs?q&l=nunavut&vjk=46fa1267e9814cca
-# https://ca.indeed.com/jobs?q&l=yukon&vjk=b07763eb5d6eac27
-# https://ca.indeed.com/jobs?q&l=Northwest%20Territories&vjk=a37cb391f72032ec
-# https://ca.indeed.com/jobs?q&l=Prince%20Edward%20Island&vjk=ccc4ad82169822dc
-# https://ca.indeed.com/jobs?q&l=Newfoundland%20and%20Labrador&vjk=d33559c870742adc
-# https://ca.indeed.com/jobs?q&l=New%20Brunswick&vjk=4bd75a5407200f63
-# https://ca.indeed.com/jobs?q&l=Nova%20Scotia&vjk=1f9823b6bcbe2f92
-# https://ca.indeed.com/jobs?q&l=Saskatchewan&vjk=d9f7ebfce2a5e788
-# https://ca.indeed.com/jobs?q&l=Manitoba&vjk=a6737b4d8cb01814
-# https://ca.indeed.com/jobs?q&l=Alberta&vjk=70793eef3b5f0f31
-# https://ca.indeed.com/jobs?q&l=British%20Columbia&vjk=509b0f86a7848a99
-# https://ca.indeed.com/jobs?q&l=Quebec&vjk=1311a4ca30ab6bcb
-# https://ca.indeed.com/jobs?q&l=ontario&vjk=2c6a2816eba8321b
-
+            # Add a job line by line
+            for job in all_jobs:
+                extract(job)
+    
+    except Exception as e:
+        print(f"Failed with code error: {e}")
 
 
-
-
-
-
-
-
-
-
-
-soup = BeautifulSoup(req.text,'html.parser')
-# print(soup.original_encoding)
-all_jobs = soup.find_all(class_="slider_container")
-# print(all_jobs)
-
-for job in all_jobs:
-    extract(job)
-
+for province in provinces:
+    send_petition(province[0], province[1])
 
 
 #Measure execution time
