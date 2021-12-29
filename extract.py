@@ -2,10 +2,10 @@ from bs4 import BeautifulSoup
 import html
 
 
-with open("res.html") as f:
-    html = f.read()
+# with open("res.html") as f:
+#     html = f.read()
     
-soup_item = BeautifulSoup(html, "html.parser")
+# soup_item = BeautifulSoup(html, "html.parser")
 
 def extract(soup):
     """Receives a bs4 object, looks for the job title, company, location, salary, duties and date published. Cleans the data and appends it to a csv file."""
@@ -20,19 +20,19 @@ def extract(soup):
     published = no_value
 
     try:
-        title = soup.find(class_="jobTitle").getText().strip()
-        company = soup.find(class_="companyName").getText().strip()
-        location = soup.find(class_="companyLocation").getText().strip()
-        salary = soup.find(class_="salary-snippet").getText().strip()
-        duties = soup.find(class_="job-snippet").getText().strip()
-        published = soup.find(class_="date").get_text().strip()
+        title = soup.find(class_="jobTitle").getText().replace("|",",").strip()
+        company = soup.find(class_="companyName").getText().replace("|",",").strip()
+        location = soup.find(class_="companyLocation").getText().replace("|",",").strip()
+        salary = soup.find(class_="salary-snippet").getText().replace("|",",").strip()
+        duties = soup.find(class_="job-snippet").getText().replace("|",",").strip()
+        published = soup.find(class_="date").get_text().replace("|",",").strip()
     except:
         print("One or more values are missing. But the job was still added.")
 
     job = (f"{title}|{company}|{location}|{salary}|{duties}|{published}").replace("\n", "")
     
     try:
-        with open("results.csv", mode="a") as file:
+        with open("calgary.csv", mode="a") as file:
             file.write(f"\n{job}")
     except:
         print(f"Something really bad happened and one register was skipped.")
