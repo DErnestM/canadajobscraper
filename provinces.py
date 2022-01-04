@@ -11,7 +11,7 @@ provinces = [
     # ["Alberta", 167],
     # ["British%20Columbia", 307],
     # ["quebec", 407],
-    # ["ontario", 595],
-    ["calgary", 811],
+    ["ontario", 1000],
+    # ["calgary", 811],
 ]
 

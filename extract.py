@@ -32,7 +32,7 @@ def extract(soup):
     job = (f"{title}|{company}|{location}|{salary}|{duties}|{published}").replace("\n", "")
     
     try:
-        with open("calgary.csv", mode="a") as file:
+        with open("ontario.csv", mode="a") as file:
             file.write(f"\n{job}")
     except:
         print(f"Something really bad happened and one register was skipped.")

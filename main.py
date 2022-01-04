@@ -27,8 +27,8 @@ def send_petition(province="canada" , iterations=1):
     
     try:
         for page in pages:
-            time.sleep(randint(0,2))
-            url_endpoint = f"https://ca.indeed.com/jobs?q&l={province}&start={page}"
+            # time.sleep(randint(0,2))
+            url_endpoint = f"https://ca.indeed.com/jobs?q&l={province}&sort=date&start={page}"
             req = requests.get(url_endpoint)
     
     
